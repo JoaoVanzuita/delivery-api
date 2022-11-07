@@ -2,6 +2,7 @@ package com.joaovanzuita.deliveryapi.controller;
 
 import com.joaovanzuita.deliveryapi.domain.model.Client;
 import com.joaovanzuita.deliveryapi.domain.repository.ClientRepository;
+import com.joaovanzuita.deliveryapi.domain.service.ManageClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,12 @@ public class ClientController {
 
 //    @Autowired
     private ClientRepository clientRepository;
+    private ManageClientService manageClientService;
 
-    public ClientController(ClientRepository clientRepository) {
+    public ClientController(ClientRepository clientRepository, ManageClientService manageClientService) {
         super();
         this.clientRepository = clientRepository;
+        this.manageClientService = manageClientService;
     }
 
     @GetMapping
@@ -51,7 +54,7 @@ public class ClientController {
     @ResponseStatus(HttpStatus.CREATED)
     public Client save(@Valid @RequestBody Client client){
 
-        return clientRepository.save(client);
+        return manageClientService.save(client);
     }
 
     @PutMapping("/{id}")
@@ -62,7 +65,7 @@ public class ClientController {
         }
 
         client.setId(id);
-        client = clientRepository.save(client);
+        client = manageClientService.save(client);
 
         return ResponseEntity.ok(client);
     }
