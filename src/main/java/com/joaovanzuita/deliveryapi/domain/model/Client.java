@@ -1,6 +1,9 @@
 package com.joaovanzuita.deliveryapi.domain.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @Entity
@@ -11,11 +14,18 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Size(max = 60)
     private String name;
 
+    @NotBlank
+    @Email
+    @Size(max = 60)
     @Column(unique = true)
     private String email;
 
+    @NotBlank
+    @Size(max = 60)
     private String phone;
 
     public Long getId() {
