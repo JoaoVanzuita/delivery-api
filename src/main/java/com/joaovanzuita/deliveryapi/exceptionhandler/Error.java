@@ -2,14 +2,14 @@ package com.joaovanzuita.deliveryapi.exceptionhandler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Error {
 
     private Integer status;
-    private LocalDateTime dateTime;
+    private OffsetDateTime dateTime;
     private String title;
     private List<Errors> errors;
 
@@ -21,11 +21,11 @@ public class Error {
         this.errors = errors;
     }
 
-    public LocalDateTime getDateTime() {
+    public OffsetDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public void setDateTime(OffsetDateTime dateTime) {
         this.dateTime = dateTime;
     }
 

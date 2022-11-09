@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         Error error = new Error();
         error.setStatus(status.value());
-        error.setDateTime(LocalDateTime.now());
+        error.setDateTime(OffsetDateTime.now());
         error.setTitle("Invalid inputs");
         error.setErrors(values);
 
@@ -55,7 +55,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         Error error = new Error();
         error.setStatus(status.value());
-        error.setDateTime(LocalDateTime.now());
+        error.setDateTime(OffsetDateTime.now());
         error.setTitle(ex.getMessage());
 
         return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
