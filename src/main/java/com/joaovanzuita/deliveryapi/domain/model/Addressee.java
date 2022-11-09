@@ -2,22 +2,28 @@ package com.joaovanzuita.deliveryapi.domain.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotBlank;
 
 @Embeddable
 public class Addressee {
 
+    @NotBlank
     @Column(name = "addressee_name")
     private String name;
 
+    @NotBlank
     @Column(name = "addressee_public_place")
     private String publicPlace;
 
+    @NotBlank
     @Column(name = "addressee_number")
     private String number;
 
+    @NotBlank
     @Column(name = "addressee_complement")
     private String complement;
 
+    @NotBlank
     @Column(name = "addressee_district")
     private String district;
 
