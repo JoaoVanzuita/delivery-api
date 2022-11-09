@@ -9,7 +9,7 @@ import java.util.List;
 public class Error {
 
     private Integer status;
-    private LocalDateTime localDateTime;
+    private LocalDateTime dateTime;
     private String title;
     private List<Errors> errors;
 
@@ -21,12 +21,12 @@ public class Error {
         this.errors = errors;
     }
 
-    public LocalDateTime getLocalDateTime() {
-        return localDateTime;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setLocalDateTime(LocalDateTime localDateTime) {
-        this.localDateTime = localDateTime;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public Integer getStatus() {

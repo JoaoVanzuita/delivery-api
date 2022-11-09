@@ -17,7 +17,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -43,7 +42,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         Error error = new Error();
         error.setStatus(status.value());
-        error.setLocalDateTime(LocalDateTime.now());
+        error.setDateTime(LocalDateTime.now());
         error.setTitle("Invalid inputs");
         error.setErrors(values);
 
@@ -56,8 +55,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         Error error = new Error();
         error.setStatus(status.value());
-        error.setLocalDateTime(LocalDateTime.now());
-        error.setTitle("Email already in use");
+        error.setDateTime(LocalDateTime.now());
+        error.setTitle(ex.getMessage());
 
         return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
     }

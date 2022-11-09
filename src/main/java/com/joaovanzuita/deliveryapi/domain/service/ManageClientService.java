@@ -33,4 +33,10 @@ public class ManageClientService {
         clientRepository.deleteById(id);
     }
 
+    @Transactional
+    public Client find(Long id){
+
+        return clientRepository.findById(id).orElseThrow(() -> new DomainException("Client not found"));
+    }
+
 }
