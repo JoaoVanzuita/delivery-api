@@ -1,5 +1,7 @@
 package com.joaovanzuita.deliveryapi.controller;
 
+import com.joaovanzuita.deliveryapi.DTO.AddresseeDTO;
+import com.joaovanzuita.deliveryapi.DTO.DeliveryDTO;
 import com.joaovanzuita.deliveryapi.domain.model.Delivery;
 import com.joaovanzuita.deliveryapi.domain.repository.DeliveryRepository;
 import com.joaovanzuita.deliveryapi.domain.service.CreateDeliveryService;
@@ -36,9 +38,27 @@ public class DeliveryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Delivery> findById(@PathVariable Long id){
+    public ResponseEntity<DeliveryDTO> findById(@PathVariable Long id){
 
-        return deliveryRepository.findById(id).map(ResponseEntity::ok)
+        return deliveryRepository.findById(id).map(delivery -> {
+                    DeliveryDTO deliveryDTO = new DeliveryDTO();
+                    AddresseeDTO addresseeDTO = new AddresseeDTO();
+                        addresseeDTO.setName(delivery.getAddressee().getName());
+                        addresseeDTO.setPublicPlace(delivery.getAddressee().getPublicPlace());
+                        addresseeDTO.setNumber(delivery.getAddressee().getNumber());
+                        addresseeDTO.setComplement(delivery.getAddressee().getComplement());
+                        addresseeDTO.setDistrict(delivery.getAddressee().getDistrict());
+
+                    deliveryDTO.setAddresseeDTO(addresseeDTO);
+                    deliveryDTO.setId(delivery.getId());
+                    deliveryDTO.setClientName(delivery.getClient().getName());
+                    deliveryDTO.setTax(delivery.getTax());
+                    deliveryDTO.setStatusDelivery(delivery.getStatusDelivery());
+                    deliveryDTO.setRequestDate(delivery.getRequestDate());
+                    deliveryDTO.setCompletionDate(delivery.getCompletionDate());
+
+                    return ResponseEntity.ok(deliveryDTO);
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
 }
