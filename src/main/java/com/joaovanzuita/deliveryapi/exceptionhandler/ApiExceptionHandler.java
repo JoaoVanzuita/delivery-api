@@ -1,6 +1,7 @@
 package com.joaovanzuita.deliveryapi.exceptionhandler;
 
-import com.joaovanzuita.deliveryapi.domain.DomainException;
+import com.joaovanzuita.deliveryapi.domain.exception.DomainException;
+import com.joaovanzuita.deliveryapi.domain.exception.EntityNotFoundException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
@@ -52,6 +53,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<Object> handleDomainException(DomainException ex, WebRequest request){
         HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        Error error = new Error();
+        error.setStatus(status.value());
+        error.setDateTime(OffsetDateTime.now());
+        error.setTitle(ex.getMessage());
+
+        return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFoundException(DomainException ex, WebRequest request){
+        HttpStatus status = HttpStatus.NOT_FOUND;
 
         Error error = new Error();
         error.setStatus(status.value());

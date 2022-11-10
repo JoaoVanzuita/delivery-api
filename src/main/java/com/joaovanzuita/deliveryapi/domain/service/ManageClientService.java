@@ -1,6 +1,6 @@
 package com.joaovanzuita.deliveryapi.domain.service;
 
-import com.joaovanzuita.deliveryapi.domain.DomainException;
+import com.joaovanzuita.deliveryapi.domain.exception.DomainException;
 import com.joaovanzuita.deliveryapi.domain.model.Client;
 import com.joaovanzuita.deliveryapi.domain.repository.ClientRepository;
 import org.springframework.stereotype.Service;

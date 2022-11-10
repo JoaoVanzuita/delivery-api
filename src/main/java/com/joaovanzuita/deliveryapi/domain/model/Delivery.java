@@ -9,6 +9,7 @@ import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -30,6 +31,9 @@ public class Delivery {
     @Embedded
     private Addressee addressee;
 
+    @OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL)
+    private List<DeliveryEvent> deliveryEvents;
+
     @NotNull
     private BigDecimal tax;
 
@@ -45,6 +49,9 @@ public class Delivery {
     @Column(name = "completion_date")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private OffsetDateTime completionDate;
+
+    public Delivery() {
+    }
 
     public Long getId() {
         return id;
@@ -102,6 +109,14 @@ public class Delivery {
         this.completionDate = completionDate;
     }
 
+    public List<DeliveryEvent> getDeliveryEvents() {
+        return deliveryEvents;
+    }
+
+    public void setDeliveryEvents(List<DeliveryEvent> deliveryEvents) {
+        this.deliveryEvents = deliveryEvents;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -113,5 +128,17 @@ public class Delivery {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public DeliveryEvent addEvent(String description) {
+        DeliveryEvent deliveryEvent = new DeliveryEvent();
+
+        deliveryEvent.setDescription(description);
+        deliveryEvent.setDateTime(OffsetDateTime.now());
+        deliveryEvent.setDelivery(this);
+
+        this.getDeliveryEvents().add(deliveryEvent);
+
+        return deliveryEvent;
     }
 }
