@@ -1,10 +1,11 @@
 package com.joaovanzuita.deliveryapi.controller;
 
-import com.joaovanzuita.deliveryapi.DTO.AddresseeDTO;
 import com.joaovanzuita.deliveryapi.DTO.DeliveryDTO;
+import com.joaovanzuita.deliveryapi.DTO.input.DeliveryInputDTO;
 import com.joaovanzuita.deliveryapi.domain.model.Delivery;
 import com.joaovanzuita.deliveryapi.domain.repository.DeliveryRepository;
 import com.joaovanzuita.deliveryapi.domain.service.CreateDeliveryService;
+import com.joaovanzuita.deliveryapi.mapper.DeliveryMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,47 +19,32 @@ public class DeliveryController {
 
     private CreateDeliveryService createDeliveryService;
     private DeliveryRepository deliveryRepository;
+    private DeliveryMapper deliveryMapper;
 
-    public DeliveryController(CreateDeliveryService createDeliveryService, DeliveryRepository deliveryRepository) {
+    public DeliveryController(CreateDeliveryService createDeliveryService, DeliveryRepository deliveryRepository, DeliveryMapper deliveryMapper) {
         this.createDeliveryService = createDeliveryService;
         this.deliveryRepository = deliveryRepository;
+        this.deliveryMapper = deliveryMapper;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Delivery save(@Valid @RequestBody Delivery delivery){
+    public DeliveryDTO save(@Valid @RequestBody DeliveryInputDTO deliveryInputDTO){
 
-        return createDeliveryService.save(delivery);
+        return deliveryMapper.map(createDeliveryService
+                .save(deliveryMapper.mapInput(deliveryInputDTO)));
     }
 
     @GetMapping
-    public List<Delivery> findAll(){
+    public List<DeliveryDTO> findAll(){
 
-        return deliveryRepository.findAll();
+        return deliveryMapper.mapList(deliveryRepository.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DeliveryDTO> findById(@PathVariable Long id){
 
-        return deliveryRepository.findById(id).map(delivery -> {
-                    DeliveryDTO deliveryDTO = new DeliveryDTO();
-                    AddresseeDTO addresseeDTO = new AddresseeDTO();
-                        addresseeDTO.setName(delivery.getAddressee().getName());
-                        addresseeDTO.setPublicPlace(delivery.getAddressee().getPublicPlace());
-                        addresseeDTO.setNumber(delivery.getAddressee().getNumber());
-                        addresseeDTO.setComplement(delivery.getAddressee().getComplement());
-                        addresseeDTO.setDistrict(delivery.getAddressee().getDistrict());
-
-                    deliveryDTO.setAddresseeDTO(addresseeDTO);
-                    deliveryDTO.setId(delivery.getId());
-                    deliveryDTO.setClientName(delivery.getClient().getName());
-                    deliveryDTO.setTax(delivery.getTax());
-                    deliveryDTO.setStatusDelivery(delivery.getStatusDelivery());
-                    deliveryDTO.setRequestDate(delivery.getRequestDate());
-                    deliveryDTO.setCompletionDate(delivery.getCompletionDate());
-
-                    return ResponseEntity.ok(deliveryDTO);
-                })
+        return deliveryRepository.findById(id).map(delivery -> ResponseEntity.ok(deliveryMapper.map(delivery)))
                 .orElse(ResponseEntity.notFound().build());
     }
 }
