@@ -1,6 +1,7 @@
 package com.joaovanzuita.deliveryapi.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.joaovanzuita.deliveryapi.domain.exception.DomainException;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -140,5 +141,21 @@ public class Delivery {
         this.getDeliveryEvents().add(deliveryEvent);
 
         return deliveryEvent;
+    }
+
+    public void finish(){
+
+        if(!canBeFinished()){
+
+            throw new DomainException("Delivery cannot be concluded");
+        }
+
+        this.setStatusDelivery(StatusDelivery.FINISHED);
+        this.setCompletionDate(OffsetDateTime.now());
+    }
+
+    public boolean canBeFinished(){
+
+        return this.statusDelivery.equals(StatusDelivery.PENDING);
     }
 }
